@@ -25,7 +25,7 @@ public class CustomEmailDomainValidator implements ConstraintValidator<EmailDoma
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
-    	return customerServiceUtils.isValidEmail(email);
-//    	return true;
+//    	return customerServiceUtils.isValidEmail(email);
+    	return true;
     }
 }

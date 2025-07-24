@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
  
 <head>
     <!-- Required meta tags -->
@@ -15,6 +15,116 @@
     <link rel="stylesheet" type="text/css" href="../assets/vendor/datatables/css/buttons.bootstrap4.css">
     <link rel="stylesheet" type="text/css" href="../assets/vendor/datatables/css/select.bootstrap4.css">
     <link rel="stylesheet" type="text/css" href="../assets/vendor/datatables/css/fixedHeader.bootstrap4.css">
+    
+    <style>
+        .pagination-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 15px 0;
+        }
+        
+        .pagination-info {
+            flex: 1;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .pagination-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .page-size-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-right: 20px;
+        }
+        
+        .page-size-control select {
+            padding: 5px 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            background-color: white;
+        }
+        
+        .pagination-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .page-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+        }
+        
+        .page-btn:hover:not(.disabled) {
+            background: #0056b3;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .page-btn.disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        .page-info {
+            padding: 8px 15px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            font-weight: 500;
+            color: #495057;
+        }
+        
+        .table-container {
+            min-height: 400px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .alert {
+            margin-bottom: 20px;
+        }
+
+        .sortable {
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+        }
+
+        .sortable:hover {
+            background-color: #f8f9fa;
+        }
+
+        .sort-icon {
+            margin-left: 5px;
+            opacity: 0.5;
+        }
+
+        .sort-icon.active {
+            opacity: 1;
+        }
+    </style>
 </head>
 
 <body>
@@ -25,38 +135,28 @@
          <!-- ============================================================== -->
         <!-- navbar -->
         <!-- ============================================================== -->
-		<div th:insert="~{'fragments/header'::header}"></div>
+        <div th:insert="~{fragments/header::header}"></div>
+        <div th:insert="~{fragments/menu::menu}"></div>
 
-        <div th:insert="~{'fragments/menu'::menu}"></div>
-
-        <!-- ============================================================== -->
-        <!-- end navbar -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- left sidebar -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- end left sidebar -->
-        <!-- ============================================================== -->
         <!-- ============================================================== -->
         <!-- wrapper  -->
         <!-- ============================================================== -->
         <div class="dashboard-wrapper">
-            <div class="container-fluid  dashboard-content">
+            <div class="container-fluid dashboard-content">
                 <!-- ============================================================== -->
                 <!-- pageheader -->
                 <!-- ============================================================== -->
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="page-header">
-                            <h2 class="pageheader-title">Data Tables</h2>
-                            <p class="pageheader-text">Proin placerat ante duiullam scelerisque a velit ac porta, fusce sit amet vestibulum mi. Morbi lobortis pulvinar quam.</p>
+                            <h2 class="pageheader-title">Customer Management</h2>
+                            <p class="pageheader-text">Manage your customer data with advanced table features and pagination.</p>
                             <div class="page-breadcrumb">
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Dashboard</a></li>
-                                        <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Tables</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Data Tables</li>
+                                        <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Customers</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">View Customers</li>
                                     </ol>
                                 </nav>
                             </div>
@@ -66,37 +166,124 @@
                 <!-- ============================================================== -->
                 <!-- end pageheader -->
                 <!-- ============================================================== -->
+                
+                <!-- Action buttons -->
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <a href="/add-customer" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add New Customer
+                        </a>
+                    </div>
+                </div>
+                
                 <div class="row">
                     <!-- ============================================================== -->
                     <!-- basic table  -->
                     <!-- ============================================================== -->
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="card">
-                            <h5 class="card-header">Basic Table</h5>
+                            <h5 class="card-header">Customer Data Table</h5>
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-bordered first">
-                                        <thead>
-                                            <tr>
-                                                <th>CustomerID</th>
-                                                <th>UserName</th>
-                                                <th>EmailId</th>
-                                                <th>Password</th>
-                                                <th>MobileNumber</th>
-                                                <th>Salary</th>
-                                            </tr>
-                                        </thead>
-										<tbody>
-										  <tr th:each="customer, iterStat : ${allUser}">
-										      <td th:text="${iterStat.index + 1}">1</td>
-											  <td th:text="${customer.customerId}">9876543210</td>
-										      <td th:text="${customer.userName}">John Doe</td>
-										      <td th:text="${customer.email}">john@example.com</td>
-										      <td th:text="${customer.mobileNumber}">9876543210</td>
-											  <td th:text="${customer.password}">9876543210</td>
-										  </tr>
-										</tbody>
-                                    </table>
+                                <!-- Show message if no customers -->
+                                <div th:unless="${hasCustomers}" class="alert alert-info">
+                                    <i class="fas fa-info-circle"></i> No customers found. <a href="/add-customer">Add your first customer</a>.
+                                </div>
+                                
+                                <!-- Show table only if customers exist -->
+                                <div th:if="${hasCustomers}">
+                                    <div class="table-responsive table-container">
+                                        <table class="table table-striped table-bordered" id="customerTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th class="sortable" th:onclick="'changeSorting(\'customerId\')'">
+                                                        Customer ID
+                                                        <i class="fas fa-sort sort-icon" 
+                                                           th:class="${sortBy == 'customerId'} ? 'fas ' + (${sortDir == 'asc'} ? 'fa-sort-up' : 'fa-sort-down') + ' sort-icon active' : 'fas fa-sort sort-icon'"></i>
+                                                    </th>
+                                                    <th class="sortable" th:onclick="'changeSorting(\'userName\')'">
+                                                        User Name
+                                                        <i class="fas fa-sort sort-icon" 
+                                                           th:class="${sortBy == 'userName'} ? 'fas ' + (${sortDir == 'asc'} ? 'fa-sort-up' : 'fa-sort-down') + ' sort-icon active' : 'fas fa-sort sort-icon'"></i>
+                                                    </th>
+                                                    <th class="sortable" th:onclick="'changeSorting(\'email\')'">
+                                                        Email
+                                                        <i class="fas fa-sort sort-icon" 
+                                                           th:class="${sortBy == 'email'} ? 'fas ' + (${sortDir == 'asc'} ? 'fa-sort-up' : 'fa-sort-down') + ' sort-icon active' : 'fas fa-sort sort-icon'"></i>
+                                                    </th>
+                                                    <th class="sortable" th:onclick="'changeSorting(\'mobileNumber\')'">
+                                                        Mobile Number
+                                                        <i class="fas fa-sort sort-icon" 
+                                                           th:class="${sortBy == 'mobileNumber'} ? 'fas ' + (${sortDir == 'asc'} ? 'fa-sort-up' : 'fa-sort-down') + ' sort-icon active' : 'fas fa-sort sort-icon'"></i>
+                                                    </th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="customer, iterStat : ${customerPage.content}">
+                                                    <td th:text="${currentPage * pageSize + iterStat.index + 1}"></td>
+                                                    <td th:text="${customer.customerId ?: 'N/A'}"></td>
+                                                    <td th:text="${customer.userName ?: 'N/A'}"></td>
+                                                    <td th:text="${customer.email ?: 'N/A'}"></td>
+                                                    <td th:text="${customer.mobileNumber ?: 'N/A'}"></td>
+                                                    <td class="action-buttons">
+                                                        <a th:href="@{'/edit-customer/' + ${customer.customerId}}" 
+                                                           class="btn btn-sm btn-primary" 
+                                                           title="Edit Customer">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <a th:href="@{'/delete-customer/' + ${customer.customerId}}" 
+                                                           class="btn btn-sm btn-danger" 
+                                                           title="Delete Customer" 
+                                                           th:onclick="'return confirm(\'Are you sure you want to delete customer: ' + ${customer.userName} + '?\');'">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    <!-- Pagination Controls -->
+                                    <div class="pagination-controls">
+                                        <div class="pagination-info">
+                                            <span th:text="'Showing ' + ${currentPage * pageSize + 1} + ' to ' + ${currentPage * pageSize + customerPage.numberOfElements} + ' of ' + ${totalElements} + ' entries'"></span>
+                                        </div>
+                                        
+                                        <div class="pagination-nav">
+                                            <div class="page-size-control">
+                                                <label for="pageSize">Show:</label>
+                                                <select id="pageSize" onchange="changePageSize(this.value)">
+                                                    <option value="5" th:selected="${pageSize == 5}">5</option>
+                                                    <option value="10" th:selected="${pageSize == 10}">10</option>
+                                                    <option value="25" th:selected="${pageSize == 25}">25</option>
+                                                    <option value="50" th:selected="${pageSize == 50}">50</option>
+                                                    <option value="100" th:selected="${pageSize == 100}">100</option>
+                                                </select>
+                                                <span>entries</span>
+                                            </div>
+                                            
+                                            <div class="pagination-buttons">
+                                                <a th:href="@{/view-customer(page=${currentPage > 0 ? currentPage - 1 : 0}, size=${pageSize}, sortBy=${sortBy}, sortDir=${sortDir})}" 
+                                                   class="page-btn" 
+                                                   th:classappend="${currentPage == 0} ? 'disabled' : ''">
+                                                    <i class="fas fa-chevron-left"></i>
+                                                    Previous
+                                                </a>
+                                                
+                                                <div class="page-info">
+                                                    Page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span>
+                                                </div>
+                                                
+                                                <a th:href="@{/view-customer(page=${currentPage + 1}, size=${pageSize}, sortBy=${sortBy}, sortDir=${sortDir})}" 
+                                                   class="page-btn"
+                                                   th:classappend="${currentPage + 1 >= totalPages} ? 'disabled' : ''">
+                                                    Next
+                                                    <i class="fas fa-chevron-right"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -110,7 +297,7 @@
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-            <div th:insert="~{'fragments/footer' :: footer}"></div>
+            <div th:insert="~{fragments/footer :: footer}"></div>
             <!-- ============================================================== -->
             <!-- end footer -->
             <!-- ============================================================== -->
@@ -119,26 +306,51 @@
     <!-- ============================================================== -->
     <!-- end main wrapper -->
     <!-- ============================================================== -->
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var currentPage = /*[[${currentPage}]]*/ 0;
+        var pageSize = /*[[${pageSize}]]*/ 10;
+        var sortBy = /*[[${sortBy}]]*/ 'customerId';
+        var sortDir = /*[[${sortDir}]]*/ 'asc';
+        /*]]>*/
+
+        function changePageSize(newSize) {
+            window.location.href = `/view-customer?page=0&size=${newSize}&sortBy=${sortBy}&sortDir=${sortDir}`;
+        }
+
+        function changeSorting(column) {
+            let newSortDir = 'asc';
+            if (sortBy === column && sortDir === 'asc') {
+                newSortDir = 'desc';
+            }
+            window.location.href = `/view-customer?page=${currentPage}&size=${pageSize}&sortBy=${column}&sortDir=${newSortDir}`;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey) {
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    if (currentPage > 0) {
+                        window.location.href = `/view-customer?page=${currentPage - 1}&size=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}`;
+                    }
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    let totalPages = /*[[${totalPages}]]*/ 1;
+                    if (currentPage + 1 < totalPages) {
+                        window.location.href = `/view-customer?page=${currentPage + 1}&size=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}`;
+                    }
+                }
+            }
+        });
+    </script>
+
     <!-- Optional JavaScript -->
     <script src="../assets/vendor/jquery/jquery-3.3.1.min.js"></script>
     <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
     <script src="../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
-    <script src="../assets/vendor/multi-select/js/jquery.multi-select.js"></script>
     <script src="../assets/libs/js/main-js.js"></script>
-    <script src="../../../../../cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="../assets/vendor/datatables/js/dataTables.bootstrap4.min.js"></script>
-    <script src="../../../../../cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
-    <script src="../assets/vendor/datatables/js/buttons.bootstrap4.min.js"></script>
-     <script src="../assets/vendor/datatables/js/data-table.js"></script>
-    <script src="../../../../../cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="../../../../../cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-    <script src="../../../../../cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-    <script src="../../../../../cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
-    <script src="../../../../../cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
-    <script src="../../../../../cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
-    <script src="../../../../../cdn.datatables.net/rowgroup/1.0.4/js/dataTables.rowGroup.min.js"></script>
-    <script src="../../../../../cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
-    <script src="../../../../../cdn.datatables.net/fixedheader/3.1.5/js/dataTables.fixedHeader.min.js"></script>
     
 </body>
  
